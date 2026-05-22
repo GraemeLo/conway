@@ -2,6 +2,7 @@ import sys, argparse
 import numpy as np
 import matplotlib.pyplot as plt 
 import matplotlib.animation as animation
+from matplotlib.backend_bases import MouseButton
 
 # Questions
 # Why 255? When changing to 155, nothing seems to change
@@ -72,6 +73,16 @@ def update(frameNum, img, grid, N):
     # need to return a tuple here, since this callback 
     # function needs to return an interable.
     return img,
+
+def on_move(event):
+    if event.inaxes:
+        print(f'data coords {event.xdata} {event.ydata},',
+              f'pixel coords {event.x} {event.y}')
+
+def on_click(event):
+    if event.button is MouseButton.LEFT:
+        print('disconnecting callback')
+        plt.disconnect(binding_id)
     
 def main():
     # optional args to show glider or gosper
@@ -96,6 +107,8 @@ def main():
     img = ax.imshow(grid, interpolation='nearest')
     ani = animation.FuncAnimation(fig, update, fargs=(img, grid, 100, ), frames = 400, interval=50)
     ani.save('basic_animation.mp4', fps=40)
+    binding_id = plt.connect('motion_notify_event', on_move)
+    plt.connect('button_press_event', on_click)
     plt.show()
 
 if __name__ == '__main__':
