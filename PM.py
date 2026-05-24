@@ -32,27 +32,29 @@ def update(frameNum, img, grid, N, direction):
                 newGrid[i] = newGrid[i+1]
 
     if direction == "left":
-        for i in range(N):
-            for j in range(N):
-                if j == N-1:
-                    newGrid[i][N-1] = [0] * N
-                else:
-                    newGrid[i][j] = newGrid[i][j+1]
-
-    if direction == "down":
+        temp = newGrid.transpose()
         for i in range(N):
             if i == N-1:
-                newGrid[N-1] = [0] * N
+                temp[N-1] = [0] * N
             else:
-                newGrid[i+1] = newGrid[i]
+                temp[i] = temp[i+1]
+        newGrid = temp.transpose()
+
+    if direction == "down":
+        for i in reversed(range(N)):
+            if i == N-1:
+                newGrid[0] = [0] * N
+            else:
+                newGrid[i] = newGrid[i-1]
 
     if direction == "right":
-        for i in range(N):
-            for j in range(N):
-                if j == 0:
-                    newGrid[i][0] = [0] * N
-                else:
-                    newGrid[i][j] = newGrid[i][j-1]
+        temp = newGrid.transpose()
+        for i in reversed(range(N)):
+            if i == N-1:
+                temp[0] = [0] * N
+            else:
+                temp[i] = temp[i-1]
+        newGrid = temp.transpose()
 
     # update data
     img.set_data(newGrid)
