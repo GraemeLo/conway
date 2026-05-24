@@ -25,7 +25,8 @@ def update(frameNum, img, grid, N, direction):
             if i == N-1:
                 newGrid[N-1] = [0] * N
             else:
-                newGrid[i] = newGrid[i+1]
+                if 255 in newGrid[i+1]:
+                    newGrid[i] = newGrid[i+1]
 
     if direction == "left":
         temp = newGrid.transpose()
