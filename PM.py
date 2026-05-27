@@ -57,6 +57,13 @@ def update(frameNum, img, grid, N, direction):
                     temp[i] = temp[i-1]
         newGrid = temp.transpose()
 
+    if direction == "p":
+        # printGrid = newGrid.reshape(N, N).tobytes()
+        # print(printGrid)
+        print(np.frombuffer(newGrid, dtype=newGrid.dtype).reshape(N, N))
+        # with open("out.txt", "w") as output:
+        #     output.write(printGrid)
+
     # update data
     img.set_data(newGrid)
     grid[:] = newGrid[:]
@@ -64,7 +71,7 @@ def update(frameNum, img, grid, N, direction):
     return img,
 
 def on_key(event):
-    if event.key in ["left","right","up","down"]:
+    if event.key in ["left","right","up","down","p"]:
         update(1, img, grid, 111, event.key)
         fig.canvas.draw()
     
